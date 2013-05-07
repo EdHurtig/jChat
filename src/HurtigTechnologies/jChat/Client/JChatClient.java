@@ -37,7 +37,7 @@ public class JChatClient {
 
 				userInput = Utils.readLine("Connect to Server: ");
 				remoteServerIP = InetAddress.getByName(userInput);
-			} while (checkServerSettings());
+			} while (!checkServerSettings());
 
 			do {
 				username = Utils.readLine("Enter Username");
@@ -69,33 +69,60 @@ public class JChatClient {
 	}
 
 	private static void post(String message) throws IOException {
-
 		Socket request = new Socket();
-		request.connect(
-				new InetSocketAddress(remoteServerIP, remoteServerPort), 5000);
-
-		if (!request.isConnected()) {
-			System.err.println("Connection Timeout");
-			request.close();
+		try {
+			request.connect(new InetSocketAddress(remoteServerIP,
+					remoteServerPort), 5000);
+		} catch (SocketTimeoutException e) {
+			System.out.println("Connection Timeout");
 		}
 
-		in = new BufferedReader(new InputStreamReader(request.getInputStream()));
-		out = new PrintWriter(request.getOutputStream(), true);
-		out.println(VERSION + " POST");
-		out.println(username);
-		out.println(password);
-		out.println(message);
-		out.close();
-		String response = in.readLine();
+		try {
+			in = new BufferedReader(new InputStreamReader(
+					request.getInputStream()));
 
-		if (response.split(" ")[1] == "200") {
-			System.out.println("Success!");
-			request.close();
+			out = new PrintWriter(request.getOutputStream(), true);
+			out.println(VERSION + " POST");
+			out.println(username);
+			out.println(password);
+			out.println(message);
+			out.println();
+			System.out.println("Sent Connection Info... ");
+		} catch (IOException e) {
+			System.err.println("FAILED TO Established Input Streams... ");
 		}
 
-		System.err.println(in.readLine());
-		System.err.println(in.readLine());
-		request.close();
+		String line;
+		int lineNum = 1;
+		///test
+		while (request.isConnected()) {
+			// reading all lines from request
+			try {
+				ArrayList<String> response = new ArrayList<String>();
+				System.out.println("Reading Input... ");
+
+				while ((line = in.readLine()).length() != 0) {
+					response.add(line);
+					//System.out.println("Read Line... ");
+
+				}
+				System.out.println("Reading DONE!... ");
+
+				for (String l : response)
+					System.out.println(l);
+
+				if (response.get(0).split(" ")[1].equals("200")) {
+					System.out.println("Success!");
+					request.close();
+				}
+				System.err.println("Failed to Register Username " + username);
+				request.close();
+			} catch (IOException e) {
+				System.err.println("FAILED to read... ");
+
+				break;
+			}
+		}		
 	}
 
 	private static boolean attemptRegister() throws IOException {
@@ -216,7 +243,7 @@ public class JChatClient {
 				for (String l : response)
 					System.out.println(l);
 
-				if (response.get(0).split(" ")[1] == "200") {
+				if (response.get(0).split(" ")[1].equals("200")) {
 					System.out.println("Success!");
 					request.close();
 					return true;
