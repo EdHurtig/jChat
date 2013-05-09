@@ -32,16 +32,16 @@ public class JChatClient {
 		try {
 			String userInput = null;
 			do {
-				userInput = Utils.readLine("Listen to port: ");
+				userInput = "8787"; //Utils.readLine("Listen to port: ");
 				remoteServerPort = Integer.parseInt(userInput);
 
-				userInput = Utils.readLine("Connect to Server: ");
+				userInput = "10.0.14.154";//Utils.readLine("Connect to Server: ");
 				remoteServerIP = InetAddress.getByName(userInput);
 			} while (!checkServerSettings());
 
 			do {
 				username = Utils.readLine("Enter Username");
-				password = Utils.readLine("Enter Password");
+				password = "test";//Utils.readLine("Enter Password");
 			} while (!attemptRegister());
 
 			System.out.println("REGISTERED - STARTING LISTENER");
@@ -87,7 +87,6 @@ public class JChatClient {
 			out.println(password);
 			out.println(message);
 			out.println();
-			System.out.println("Sent Connection Info... ");
 		} catch (IOException e) {
 			System.err.println("FAILED TO Established Input Streams... ");
 		}
@@ -99,26 +98,22 @@ public class JChatClient {
 			// reading all lines from request
 			try {
 				ArrayList<String> response = new ArrayList<String>();
-				System.out.println("Reading Input... ");
 
 				while ((line = in.readLine()).length() != 0) {
 					response.add(line);
 					//System.out.println("Read Line... ");
 
 				}
-				System.out.println("Reading DONE!... ");
 
-				for (String l : response)
-					System.out.println(l);
 
 				if (response.get(0).split(" ")[1].equals("200")) {
-					System.out.println("Success!");
 					request.close();
+					return;
 				}
-				System.err.println("Failed to Register Username " + username);
+				System.err.println(response.get(1));
 				request.close();
 			} catch (IOException e) {
-				System.err.println("FAILED to read... ");
+				System.err.println("FAILED to read response");
 
 				break;
 			}

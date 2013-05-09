@@ -18,13 +18,12 @@ public class ClientChatListener extends ServerSocket implements Runnable {
 		while (true) {
 			try {				
 				Socket client = this.accept();
-				
 				BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 				PrintWriter out = new PrintWriter(client.getOutputStream(),true);
 
 				ArrayList<String> content = new ArrayList<String>();
 				String line = null;
-				while ((line = in.readLine()) != null) {
+				while ((line = in.readLine()).length() != 0) {
 					content.add(line);
 				}
 				if (content.size() == 0) {
@@ -38,7 +37,7 @@ public class ClientChatListener extends ServerSocket implements Runnable {
 					for (int i = 1; i < content.size(); i++)
 						System.out.println(content.get(i));
 				} else {
-					System.err.println("Server sent request with unknown header command");
+					System.err.println("Server sent request with unknown header command: '" + content.get(0) + "'");
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
