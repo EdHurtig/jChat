@@ -71,7 +71,7 @@ public class IncommingRequest extends Thread implements Runnable {
 					JChatServer.logDebug("Done Reading a total of  " + lineNum++ + " lines from request: " + requestID);
 
 				} catch (IOException e) {
-					JChatServer.logDebug("IOError While Reading line");
+					JChatServer.logDebug("IOError While Reading line: '" + lineNum + "'");
 					e.printStackTrace();
 
 					break;
@@ -126,8 +126,16 @@ public class IncommingRequest extends Thread implements Runnable {
 							close();
 							return;
 						}
-						if (isAuthenticated(client.getInetAddress(),content.get(2), content.get(3))) {
-							server.post(getUserForClient(client).getName() + "> " + content.get(4));
+						if (isAuthenticated(client.getInetAddress(),content.get(1), content.get(2))) {
+							server.post(getUserForClient(client).getName() + "> " + content.get(3));
+							out.println(JChatServer.VERSION + " 200 OK");
+							close();
+							return;
+						} else {
+							out.println(JChatServer.VERSION + " 401 ACCESS_DENIED");
+							out.println(JChatServer.ERROR + "You are not authorized");
+							close();
+							return;
 						}
 					} else if (headers[1].equals("REGISTER")) {
 						JChatServer.logDebug("Header is Register");
@@ -144,6 +152,7 @@ public class IncommingRequest extends Thread implements Runnable {
 							out.println(JChatServer.VERSION + " 403 FORBIDDEN");
 							out.println(JChatServer.ERROR + "The username: " + username + " is " + (username.length() > 100 ? "WAY" : "a bit")  + " too long. The Max username length is " + JChatServer.MAX_NAME_LENGTH + " Characters");
 							close();
+							return;
 						}
 						
 						for (User user : server.getUsers()) {

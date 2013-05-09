@@ -22,7 +22,7 @@ public class User {
 		this.ip = inetAddress;
 	}
 	public boolean isBanned() {
-		return (new Date()).getTime() < bannedTime.getTime();
+		return (bannedTime != null && (new Date()).getTime() < bannedTime.getTime());
 	}
 	
 	public void ban(Date time) {

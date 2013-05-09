@@ -39,16 +39,16 @@ public class OutgoingRequest extends Thread implements Runnable {
 	public void run() {
 		try {
 			client = new Socket(user.getIp(),server.getLocalPort());
-			
-			JChatServer.logDebug("Sending Message to " + user.getName());
+			JChatServer.logDebug("Sending Message to '" + content.toString()  + "'" + user.getName());
 			
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			out = new PrintWriter(client.getOutputStream(),true);
-			
+			out.println(JChatServer.VERSION + " POST");
+
 			for (String line : content) {
 				out.println(line);
 			}
-			out.close();
+			out.println();
 			String line = null;
 			while ((line = in.readLine()) != null) {
 				response.add(line);
