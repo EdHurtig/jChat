@@ -1,5 +1,7 @@
 package HurtigTechnologies;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Utils {
 
@@ -256,4 +258,38 @@ public class Utils {
 
 	}
 
+	public static int versionCompare(String v1, String v2) {
+		if (v1.equals(v2)) return 0;
+		
+		ArrayList<String> v1arr = new ArrayList<String>();
+		ArrayList<String> v2arr = new ArrayList<String>();
+		String[] v1s = v1.split("\\.");
+		String[] v2s = v2.split("\\.");
+		for (String s1 : v1s)
+			v1arr.add(s1);
+		for (String s2 : v2s)
+			v2arr.add(s2);
+		if (v1arr.get(0).equals(v2arr.get(0))) {
+			v1arr.remove(0);
+			v2arr.remove(0);
+			v1 = "";
+			v2 = "";
+			for (String s3 : v1arr)
+				v1 += s3 + ".";
+			for (String s4 : v2arr)
+				v2 += s4 + ".";
+			System.out.println("v1: " + v1);
+			System.out.println("v2: " + v2);
+			if (v1.equals("")) return -1;
+			if (v2.equals("")) return 1;
+			
+			v1 = v1.substring(0, v1.length() -1);
+			v2 = v2.substring(0, v2.length() -1);	
+			return versionCompare(v1,v2);
+		}
+		else
+			return (Integer.parseInt(v1arr.get(0)) < Integer.parseInt(v2arr.get(0)) ? -1 : 1);
+			
+	}
 }
+	

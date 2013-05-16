@@ -13,6 +13,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import HurtigTechnologies.Utils;
+
 public class IncommingRequest extends Thread implements Runnable {
 
 	public IncommingRequest(Socket client, ChatListener listener) {
@@ -113,6 +115,12 @@ public class IncommingRequest extends Thread implements Runnable {
 
 						out.println(JChatServer.VERSION + " 400 BAD_REQUEST");
 						out.println(JChatServer.ERROR + "ERROR Expecting first line to be formated in '<version> <command>' format with ONLY 1 space");
+						close();
+						return;
+					}
+					if (Utils.versionCompare(headers[0].split("/")[1], JChatServer.VERSION.split("/")[1]) != 0) {
+						out.println(JChatServer.VERSION + " 101 SWITCHING_PROTOCOLS");
+						out.println(JChatServer.ERROR + "ERROR Please use Version " + JChatServer.VERSION.split("/")[1]);
 						close();
 						return;
 					}

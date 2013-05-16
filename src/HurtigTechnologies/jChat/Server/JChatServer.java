@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class JChatServer {
-	public static final String VERSION = "JCHATSERVER/1.0";
+	public static final String VERSION = "JCHATSERVER/1.1";
 	public static final boolean DEBUG = true;
 	public static final String COMMENT = "#";
 	public static final String PROMPT = ">>";

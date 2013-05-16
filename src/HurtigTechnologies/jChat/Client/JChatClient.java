@@ -19,7 +19,7 @@ import HurtigTechnologies.jChat.Server.JChatServer;
 
 public class JChatClient {
 
-	public static final String VERSION = "JCHATCLIENT/1.0";
+	public static final String VERSION = "JCHATCLIENT/1.1";
 
 	static InetAddress remoteServerIP;
 	static int remoteServerPort;
@@ -31,17 +31,18 @@ public class JChatClient {
 	public static void main(String[] args) {
 		try {
 			String userInput = null;
+			
 			do {
-				userInput = "8787"; //Utils.readLine("Listen to port: ");
+				userInput = Utils.readLine("Listen to port: (8787)");
 				remoteServerPort = Integer.parseInt(userInput);
 
-				userInput = "10.0.14.154";//Utils.readLine("Connect to Server: ");
+				userInput = Utils.readLine("Connect to Server: (jchat.lsrhs.ht.gs)");
 				remoteServerIP = InetAddress.getByName(userInput);
 			} while (!checkServerSettings());
 
 			do {
 				username = Utils.readLine("Enter Username");
-				password = "test";//Utils.readLine("Enter Password");
+				password = Utils.readLine("Enter Password");
 			} while (!attemptRegister());
 
 			System.out.println("REGISTERED - STARTING LISTENER");
