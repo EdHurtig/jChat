@@ -175,6 +175,7 @@ public class IncommingRequest extends Thread implements Runnable {
 						newUser.setName(username);
 						newUser.setPassword(password);
 						newUser.setIp(client.getInetAddress());
+						newUser.setChatListener(server);
 						server.getUsers().add(newUser);
 						
 						out.println(JChatServer.VERSION + " 200 OK");
@@ -196,35 +197,9 @@ public class IncommingRequest extends Thread implements Runnable {
 					
 					
 					/** END Request **/
-					
-					
-					
-					
-				
+
 				}
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

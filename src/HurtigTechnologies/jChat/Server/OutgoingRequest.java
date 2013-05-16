@@ -78,10 +78,12 @@ public class OutgoingRequest extends Thread implements Runnable {
 			
 			close();
 			JChatServer.logDebug("Closed Outging Request with ID" + getRequestID());
+			user.clearFails();
 			/** END Request **/
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			user.addNumFails();
 			e.printStackTrace();
 		}
 	}
